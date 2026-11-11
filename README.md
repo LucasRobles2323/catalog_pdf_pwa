@@ -67,6 +67,7 @@ El proyecto está pensado para que personas no técnicas puedan gestionar invent
   * *Neutro:* Azules marinos y escalas de grises modernas.
 - **Selector Libre:** Personalización mediante selectores de color para fondo general, fondo de tarjeta, tipografías y color de acento.
 - **Cabecera y Banners:** Título principal, subtítulo y banner superior para avisos (ej. *"Todos los pedidos incluyen empaque especial"*).
+- **Imagen de Respaldo Personalizable:** Opción en el panel de configuración para subir un logo o imagen propia que sustituya al ícono genérico (`default.svg`) en los productos que no dispongan de fotografía.
 
 ### 8. Sistema de Respaldo e Intercambio Portable
 - **Copia de Seguridad en JSON Único:** Exporta todo el catálogo en un archivo `.json` que contiene los textos, configuraciones y las fotografías codificadas en cadenas Base64.
@@ -104,7 +105,7 @@ catalog_pdf_pwa/
     ├── icons/
     │   ├── icon-192.png    # Icono estándar PWA
     │   └── icon-512.png    # Icono en alta resolución PWA
-    └── default.jpg         # Imagen neutra de respaldo
+    └── default.svg         # Gráfico vectorial neutro y ultra ligero (~1.5 KB)
 ```
 
 ---
@@ -125,6 +126,7 @@ Almacena las preferencias visuales, maquetación y encabezados.
   "columns": 3,
   "ingredients_mode": "inline",
   "theme_preset": "botanico",
+  "custom_placeholder": null,
   "colors": {
     "bg": "#f4f5f7",
     "card_bg": "#ffffff",
@@ -149,13 +151,13 @@ Almacena cada uno de los artículos del catálogo.
 {
   "id": "prod_1731289200000",
   "order": 0,
-  "nombre": "Producto Artesanal Ejemplo",
-  "formato": "70 gr",
-  "precio": 4500,
-  "stock": "si",
-  "descripcion": "Descripción concisa de las características y beneficios del producto.",
-  "ingredientes": "Materiales, componentes o especificaciones técnicas.",
-  "imagen": "data:image/jpeg;base64,/9j/4AAQSkZJRg..."
+  "name": "Producto Artesanal Ejemplo",
+  "format": "70 gr",
+  "price": 4500,
+  "in_stock": true,
+  "description": "Descripción concisa de las características y beneficios del producto.",
+  "ingredients": "Materiales, componentes o especificaciones técnicas.",
+  "image": "data:image/jpeg;base64,/9j/4AAQSkZJRg..."
 }
 ```
 
