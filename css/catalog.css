@@ -1,0 +1,347 @@
+/**
+ * css/catalog.css
+ * Styles for the catalog canvas, header, promotional banner, responsive grid, and product cards.
+ */
+
+/* ==========================================================================
+   CATALOG PAGE CONTAINER (A4 PROPORTION ON DESKTOP, FLUID ON MOBILE)
+   ========================================================================== */
+.catalog-page {
+  max-width: 1020px;
+  margin: 1.5rem auto;
+  padding: 2rem 1.5rem;
+  background-color: var(--bg-color);
+}
+
+/* ==========================================================================
+   CATALOG HEADER
+   ========================================================================== */
+.catalog-header {
+  text-align: center;
+  margin-bottom: 1.75rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 2px solid var(--accent-color);
+}
+
+.catalog-header__title {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800;
+  color: var(--accent-color);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.catalog-header__subtitle {
+  margin-top: 0.4rem;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  font-weight: 500;
+  color: var(--text-color);
+  opacity: 0.85;
+}
+
+/* ==========================================================================
+   PROMOTIONAL BANNER
+   ========================================================================== */
+.catalog-banner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: var(--card-bg);
+  border-left: 5px solid var(--accent-color);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.75rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.catalog-banner__badge {
+  background-color: var(--accent-color);
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.35rem 0.7rem;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+
+.catalog-banner__content strong {
+  display: block;
+  font-size: 1rem;
+  color: var(--text-color);
+  margin-bottom: 0.15rem;
+}
+
+.catalog-banner__content p {
+  font-size: 0.9rem;
+  color: var(--text-color);
+  opacity: 0.85;
+}
+
+/* ==========================================================================
+   PRODUCT GRID
+   ========================================================================== */
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-columns, 3), minmax(0, 1fr));
+  gap: 1.25rem;
+  align-items: stretch;
+}
+
+/* Responsive adjustment for small phone screens while editing */
+@media screen and (max-width: 640px) {
+  .catalog-page {
+    padding: 1rem 0.75rem;
+    margin: 0.5rem auto;
+  }
+
+  .catalog-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+
+  .catalog-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3.5rem 1.5rem;
+  background-color: var(--card-bg);
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-lg);
+  color: var(--muted-text);
+}
+
+.empty-state p + p {
+  margin-top: 0.5rem;
+}
+
+/* ==========================================================================
+   PRODUCT CARD
+   ========================================================================== */
+.product-card {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.2s ease;
+}
+
+.product-card.is-dragging {
+  opacity: 0.5;
+  transform: scale(0.98);
+  border: 2px dashed var(--accent-color);
+}
+
+/* Out of Stock visual state */
+.product-card--out-of-stock .card__image {
+  filter: grayscale(45%);
+  opacity: 0.75;
+}
+
+.product-card--out-of-stock .card__title,
+.product-card--out-of-stock .card__price {
+  opacity: 0.65;
+}
+
+/* Card Media & 1:1 Aspect Ratio Image */
+.card__media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background-color: #f1f5f9;
+  overflow: hidden;
+}
+
+.card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Out of Stock Badge */
+.badge {
+  position: absolute;
+  top: 0.65rem;
+  left: 0.65rem;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-radius: var(--radius-sm);
+  z-index: 2;
+}
+
+.badge--danger {
+  background-color: var(--danger-color);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.35);
+}
+
+/* Reorder Controls Overlay (▲ ⠿ ▼) */
+.card__reorder-tools {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  gap: 0.25rem;
+  background: rgba(255, 255, 255, 0.92);
+  padding: 0.2rem;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  z-index: 2;
+}
+
+.btn-tool {
+  border: none;
+  background: transparent;
+  color: #1e293b;
+  width: 2rem;
+  height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  transition: background-color 0.15s ease;
+}
+
+.btn-tool:hover,
+.btn-tool:active {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.drag-handle {
+  cursor: grab;
+  touch-action: none;
+  font-size: 1.1rem;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+/* Card Body */
+.card__body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.card__header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.card__title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--text-color);
+}
+
+.card__format {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent-color);
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.card__price-row {
+  margin-top: 0.1rem;
+}
+
+.card__price {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--accent-color);
+}
+
+.card__price--empty {
+  font-size: 0.9rem;
+  font-weight: 500;
+  font-style: italic;
+  color: var(--muted-text);
+}
+
+.card__description {
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--text-color);
+  opacity: 0.9;
+  white-space: pre-line;
+}
+
+/* Ingredients - Inline Mode */
+.card__ingredients {
+  margin-top: auto;
+  padding-top: 0.55rem;
+  border-top: 1px dashed var(--border-color);
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: var(--text-color);
+  opacity: 0.75;
+}
+
+.card__ingredients::before {
+  content: "Componentes: ";
+  font-weight: 700;
+}
+
+/* Ingredients - Dropdown (<details>) Mode */
+.card__ingredients-dropdown {
+  margin-top: auto;
+  padding-top: 0.5rem;
+  border-top: 1px dashed var(--border-color);
+  font-size: 0.8rem;
+}
+
+.card__ingredients-dropdown summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--accent-color);
+  user-select: none;
+}
+
+.card__ingredients-dropdown ul {
+  margin-top: 0.4rem;
+  padding-left: 1.1rem;
+  color: var(--text-color);
+  opacity: 0.85;
+}
+
+.card__ingredients-dropdown li {
+  margin-bottom: 0.15rem;
+}
+
+/* Card Admin Footer */
+.card__footer {
+  display: flex;
+  gap: 0.4rem;
+  padding: 0.65rem 1rem;
+  background-color: rgba(0, 0, 0, 0.025);
+  border-top: 1px solid var(--border-color);
+}
+
+.card__footer .btn {
+  flex: 1;
+}

@@ -1,0 +1,417 @@
+/**
+ * css/admin.css
+ * Styles for the top admin bar, buttons, modal dialogs, and form controls.
+ */
+
+/* ==========================================================================
+   TOP ADMIN BAR
+   ========================================================================== */
+.admin-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: #1e293b;
+  color: #ffffff;
+  padding: 0.75rem 1rem;
+  box-shadow: var(--shadow-md);
+}
+
+.admin-bar__actions {
+  max-width: 1020px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media screen and (max-width: 600px) {
+  .admin-bar__actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+}
+
+/* ==========================================================================
+   BUTTONS
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.65rem 1rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  transition: filter 0.15s ease, transform 0.1s ease, background-color 0.15s ease;
+  text-align: center;
+  user-select: none;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn--primary {
+  background-color: #16a34a;
+  color: #ffffff;
+}
+
+.btn--primary:hover {
+  filter: brightness(1.08);
+}
+
+.btn--secondary {
+  background-color: #334155;
+  color: #ffffff;
+}
+
+.modal .btn--secondary,
+.card__footer .btn--secondary {
+  background-color: #e2e8f0;
+  color: #1e293b;
+}
+
+.btn--secondary:hover {
+  filter: brightness(0.95);
+}
+
+.btn--accent {
+  background-color: #2563eb;
+  color: #ffffff;
+}
+
+.btn--accent:hover {
+  filter: brightness(1.1);
+}
+
+.btn--danger {
+  background-color: var(--danger-bg);
+  color: var(--danger-color);
+  border-color: rgba(220, 38, 38, 0.25);
+}
+
+.btn--danger:hover {
+  background-color: var(--danger-color);
+  color: #ffffff;
+}
+
+.btn--small {
+  padding: 0.45rem 0.65rem;
+  font-size: 0.8rem;
+}
+
+.btn--full {
+  width: 100%;
+  padding: 0.8rem 1rem;
+}
+
+/* ==========================================================================
+   MODALS (<dialog>)
+   ========================================================================== */
+.modal {
+  margin: auto;
+  width: calc(100% - 1.5rem);
+  max-width: 540px;
+  max-height: 90vh;
+  border: none;
+  border-radius: var(--radius-lg);
+  background-color: #ffffff;
+  color: #1e293b;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  padding: 0;
+  overflow: hidden;
+}
+
+.modal::backdrop {
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(2px);
+}
+
+.modal__form {
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+}
+
+.modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+}
+
+.modal__header h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.btn-close {
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: #64748b;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-close:hover {
+  background-color: #e2e8f0;
+  color: #0f172a;
+}
+
+.modal__body {
+  padding: 1.25rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  padding: 0.9rem 1.25rem;
+  border-top: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+}
+
+/* ==========================================================================
+   FORMS & INPUTS
+   ========================================================================== */
+.form-fieldset {
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.form-fieldset legend {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #475569;
+  padding: 0 0.4rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+@media screen and (max-width: 480px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-sm);
+  background-color: #ffffff;
+  color: #0f172a;
+  font-size: 0.95rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.form-textarea {
+  resize: vertical;
+}
+
+.form-hint {
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+/* Image Upload Preview */
+.file-input {
+  display: none;
+}
+
+.image-preview-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.image-preview-wrapper img {
+  width: 84px;
+  height: 84px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid #cbd5e1;
+  background-color: #f1f5f9;
+}
+
+/* Toggle Switch (Stock & Banner) */
+.form-group--checkbox {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.25rem 0;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: #cbd5e1;
+  border-radius: 34px;
+  transition: 0.2s;
+}
+
+.toggle-slider::before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  transition: 0.2s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background-color: #16a34a;
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(22px);
+}
+
+.toggle-label {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+/* Quick Ingredient Chips */
+.quick-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.35rem;
+}
+
+.quick-tags__label {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin-right: 0.2rem;
+}
+
+.tag-chip {
+  background-color: #f1f5f9;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.tag-chip:hover,
+.tag-chip:active {
+  background-color: #e2e8f0;
+  border-color: #94a3b8;
+}
+
+/* Color Pickers Grid */
+.color-pickers-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.65rem;
+  padding-top: 0.25rem;
+}
+
+.color-picker-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.color-picker-item label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.color-picker-item input[type="color"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 38px;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-sm);
+  padding: 2px;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+
+/* Backup Modal Actions */
+.backup-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-top: 0.5rem;
+}

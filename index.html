@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo de Productos</title>
+
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#44683c">
+  <meta name="description" content="Generador y gestor de catálogos en PDF">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="assets/default.svg" type="image/svg+xml">
+
+  <!-- Hojas de Estilo Modulares -->
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/catalog.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <link rel="stylesheet" href="css/print.css" media="print">
+</head>
+<body>
+
+  <!-- ========================================== -->
+  <!-- BARRA DE ADMINISTRACIÓN (Oculta en PDF)    -->
+  <!-- ========================================== -->
+  <header class="admin-bar no-print">
+    <div class="admin-bar__actions">
+      <button id="btn-new-product" class="btn btn--primary" type="button">
+        + Nuevo Producto
+      </button>
+      <button id="btn-settings" class="btn btn--secondary" type="button" title="Configuración visual">
+        ⚙ Ajustes
+      </button>
+      <button id="btn-backup" class="btn btn--secondary" type="button" title="Respaldo de datos">
+        💾 Respaldo
+      </button>
+      <button id="btn-print-pdf" class="btn btn--accent" type="button">
+        📄 Exportar PDF
+      </button>
+    </div>
+  </header>
+
+  <!-- ========================================== -->
+  <!-- LIENZO DEL CATÁLOGO (Visible en PDF)      -->
+  <!-- ========================================== -->
+  <div class="catalog-page">
+    
+    <!-- Membrete y Cabecera Editable -->
+    <header class="catalog-header">
+      <h1 id="view-catalog-title" class="catalog-header__title">Catálogo de Productos</h1>
+      <p id="view-catalog-subtitle" class="catalog-header__subtitle">Colección Artesanal</p>
+    </header>
+
+    <!-- Banner Opcional de Avisos -->
+    <aside id="view-catalog-banner" class="catalog-banner hidden">
+      <span id="view-banner-badge" class="catalog-banner__badge">Aviso</span>
+      <div class="catalog-banner__content">
+        <strong id="view-banner-title">Información importante</strong>
+        <p id="view-banner-text">Detalle del aviso o promoción.</p>
+      </div>
+    </aside>
+
+    <!-- Cuadrícula Dinámica de Productos -->
+    <main id="catalog-grid" class="catalog-grid" aria-live="polite">
+      <!-- Las tarjetas se inyectan dinámicamente desde js/app.js -->
+    </main>
+
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: CREAR / EDITAR PRODUCTO             -->
+  <!-- ========================================== -->
+  <dialog id="modal-product" class="modal no-print">
+    <form id="form-product" class="modal__form" method="dialog" novalidate>
+      <div class="modal__header">
+        <h2 id="modal-product-title">Nuevo Producto</h2>
+        <button type="button" class="btn-close" data-close-modal="modal-product" aria-label="Cerrar">✕</button>
+      </div>
+
+      <div class="modal__body">
+        <!-- ID Oculto para control de edición -->
+        <input type="hidden" id="prod-id" name="id">
+
+        <!-- Selector de Imagen y Vista Previa -->
+        <div class="form-group form-group--image">
+          <label for="prod-image-input" class="form-label">Fotografía del Producto</label>
+          <div class="image-preview-wrapper">
+            <img id="prod-image-preview" src="assets/default.svg" alt="Vista previa">
+            <input type="file" id="prod-image-input" accept="image/*" class="file-input">
+            <button type="button" id="btn-trigger-file" class="btn btn--small">Seleccionar Foto</button>
+          </div>
+          <small class="form-hint">Se recortará automáticamente en formato cuadrado 1:1.</small>
+        </div>
+
+        <!-- Nombre -->
+        <div class="form-group">
+          <label for="prod-name" class="form-label">Nombre del Producto *</label>
+          <input type="text" id="prod-name" name="name" class="form-input" required 
+                 spellcheck="true" autocapitalize="sentences" placeholder="Ej. Jabón de Miel y Avena">
+        </div>
+
+        <!-- Formato y Precio en una sola fila -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="prod-format" class="form-label">Formato / Contenido</label>
+            <input type="text" id="prod-format" name="format" class="form-input" 
+                   placeholder="Ej. 70 gr / 100 ml">
+          </div>
+
+          <div class="form-group">
+            <label for="prod-price" class="form-label">Precio ($)</label>
+            <input type="text" id="prod-price" name="price" class="form-input" 
+                   inputmode="numeric" placeholder="$0">
+            <small class="form-hint">Dejar en 0 o vacío para "Sin precio".</small>
+          </div>
+        </div>
+
+        <!-- Disponibilidad (Stock) -->
+        <div class="form-group form-group--checkbox">
+          <label class="toggle-switch">
+            <input type="checkbox" id="prod-stock" name="in_stock" checked>
+            <span class="toggle-slider"></span>
+          </label>
+          <span class="toggle-label">Producto disponible en stock</span>
+        </div>
+
+        <!-- Descripción -->
+        <div class="form-group">
+          <label for="prod-desc" class="form-label">Descripción</label>
+          <textarea id="prod-desc" name="description" class="form-textarea" rows="2" 
+                    spellcheck="true" autocapitalize="sentences" 
+                    placeholder="Beneficios principales, textura o características..."></textarea>
+        </div>
+
+        <!-- Componentes / Ingredientes -->
+        <div class="form-group">
+          <label for="prod-ingredients" class="form-label">Componentes / Ingredientes</label>
+          <textarea id="prod-ingredients" name="ingredients" class="form-textarea" rows="2" 
+                    spellcheck="true" autocapitalize="sentences" 
+                    placeholder="Escribe o dicta separado por comas o saltos de línea..."></textarea>
+          
+          <!-- Pastillas de inserción rápida -->
+          <div class="quick-tags" id="quick-tags-container">
+            <span class="quick-tags__label">Atajos frecuentes:</span>
+            <button type="button" class="tag-chip" data-ingredient="Glicerina vegetal">+ Glicerina</button>
+            <button type="button" class="tag-chip" data-ingredient="Vitamina E">+ Vit. E</button>
+            <button type="button" class="tag-chip" data-ingredient="Miel de abeja">+ Miel</button>
+            <button type="button" class="tag-chip" data-ingredient="Avena orgánica">+ Avena</button>
+            <button type="button" class="tag-chip" data-ingredient="Aceite esencial">+ Esencia</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal__footer">
+        <button type="button" class="btn btn--secondary" data-close-modal="modal-product">Cancelar</button>
+        <button type="submit" class="btn btn--primary" id="btn-save-product">Guardar Producto</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- ========================================== -->
+  <!-- MODAL: AJUSTES Y PERSONALIZACIÓN           -->
+  <!-- ========================================== -->
+  <dialog id="modal-settings" class="modal no-print">
+    <form id="form-settings" class="modal__form" method="dialog">
+      <div class="modal__header">
+        <h2>Personalización del Catálogo</h2>
+        <button type="button" class="btn-close" data-close-modal="modal-settings" aria-label="Cerrar">✕</button>
+      </div>
+
+      <div class="modal__body">
+        <!-- Títulos de Cabecera -->
+        <fieldset class="form-fieldset">
+          <legend>Textos Principales</legend>
+          <div class="form-group">
+            <label for="setting-title" class="form-label">Título del Catálogo</label>
+            <input type="text" id="setting-title" name="catalog_title" class="form-input">
+          </div>
+          <div class="form-group">
+            <label for="setting-subtitle" class="form-label">Subtítulo</label>
+            <input type="text" id="setting-subtitle" name="catalog_subtitle" class="form-input">
+          </div>
+        </fieldset>
+
+        <!-- Banner de Avisos Opcional -->
+        <fieldset class="form-fieldset">
+          <legend>Banner de Aviso / Promoción</legend>
+          <div class="form-group form-group--checkbox">
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-banner-active" name="banner_active">
+              <span class="toggle-slider"></span>
+            </label>
+            <span class="toggle-label">Mostrar banner en el catálogo</span>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="setting-banner-badge" class="form-label">Etiqueta corta</label>
+              <input type="text" id="setting-banner-badge" class="form-input" placeholder="Ej. Aviso Especial">
+            </div>
+            <div class="form-group">
+              <label for="setting-banner-title" class="form-label">Título del aviso</label>
+              <input type="text" id="setting-banner-title" class="form-input" placeholder="Ej. ¡Listos para regalar!">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="setting-banner-text" class="form-label">Mensaje del banner</label>
+            <input type="text" id="setting-banner-text" class="form-input" placeholder="Detalle de la promoción o empaque...">
+          </div>
+        </fieldset>
+
+        <!-- Columnas y Modo de Ingredientes -->
+        <fieldset class="form-fieldset">
+          <legend>Distribución y Formato</legend>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="setting-columns" class="form-label">Columnas por página</label>
+              <select id="setting-columns" name="columns" class="form-select">
+                <option value="2">2 Columnas (Grande)</option>
+                <option value="3" selected>3 Columnas (Estándar)</option>
+                <option value="4">4 Columnas (Compacto)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="setting-ingredients-mode" class="form-label">Visualización Ingredientes</label>
+              <select id="setting-ingredients-mode" name="ingredients_mode" class="form-select">
+                <option value="inline">Texto corrido</option>
+                <option value="details">Lista desplegable</option>
+              </select>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Paletas y Colores -->
+        <fieldset class="form-fieldset">
+          <legend>Colores y Tema</legend>
+          <div class="form-group">
+            <label for="setting-theme-preset" class="form-label">Temas Predefinidos</label>
+            <select id="setting-theme-preset" name="theme_preset" class="form-select">
+              <option value="botanico">Botánico / Artesanal</option>
+              <option value="lujo">Minimalista / Lujo</option>
+              <option value="pastel">Pastel / Suave</option>
+              <option value="neutro">Neutro / Moderno</option>
+              <option value="custom">Personalizado</option>
+            </select>
+          </div>
+
+          <div class="color-pickers-grid" id="custom-color-controls">
+            <div class="color-picker-item">
+              <label for="color-bg">Fondo</label>
+              <input type="color" id="color-bg" name="color_bg" value="#f4f5f7">
+            </div>
+            <div class="color-picker-item">
+              <label for="color-card">Tarjeta</label>
+              <input type="color" id="color-card" name="color_card" value="#ffffff">
+            </div>
+            <div class="color-picker-item">
+              <label for="color-text">Texto</label>
+              <input type="color" id="color-text" name="color_text" value="#2d3748">
+            </div>
+            <div class="color-picker-item">
+              <label for="color-accent">Acento</label>
+              <input type="color" id="color-accent" name="color_accent" value="#44683c">
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Imagen de Respaldo por Defecto -->
+        <fieldset class="form-fieldset">
+          <legend>Imagen sin Foto (Placeholder)</legend>
+          <div class="image-preview-wrapper">
+            <img id="setting-placeholder-preview" src="assets/default.svg" alt="Respaldo actual">
+            <input type="file" id="setting-placeholder-input" accept="image/*" class="file-input">
+            <button type="button" id="btn-trigger-placeholder" class="btn btn--small">Subir Logo / Reemplazo</button>
+            <button type="button" id="btn-reset-placeholder" class="btn btn--small btn--danger">Restaurar SVG</button>
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="modal__footer">
+        <button type="button" class="btn btn--secondary" data-close-modal="modal-settings">Cancelar</button>
+        <button type="submit" class="btn btn--primary">Aplicar Cambios</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- ========================================== -->
+  <!-- MODAL: COPIA DE SEGURIDAD (BACKUP)         -->
+  <!-- ========================================== -->
+  <dialog id="modal-backup" class="modal no-print">
+    <div class="modal__form">
+      <div class="modal__header">
+        <h2>Copia de Seguridad</h2>
+        <button type="button" class="btn-close" data-close-modal="modal-backup" aria-label="Cerrar">✕</button>
+      </div>
+      <div class="modal__body">
+        <p>Exporta toda tu información en un archivo para respaldarla o pasarla a otro celular por WhatsApp.</p>
+        
+        <div class="backup-actions">
+          <button type="button" id="btn-export-json" class="btn btn--primary btn--full">
+            ⬇ Descargar Respaldo (.json)
+          </button>
+          
+          <hr class="separator">
+
+          <label for="input-import-json" class="form-label">Restaurar desde archivo previo:</label>
+          <input type="file" id="input-import-json" accept=".json" class="file-input">
+          <button type="button" id="btn-trigger-import" class="btn btn--secondary btn--full">
+            ⬆ Seleccionar Archivo para Restaurar
+          </button>
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button type="button" class="btn btn--secondary" data-close-modal="modal-backup">Cerrar</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- ========================================== -->
+  <!-- CARGA DEL CONTROLADOR JS PRINCIPAL         -->
+  <!-- ========================================== -->
+  <script type="module" src="js/app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+{
+  "name": "Catálogo de Productos PDF",
+  "short_name": "Catálogo PDF",
+  "description": "Generador y gestor de catálogos de productos exportables a PDF A4.",
+  "lang": "es",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f4f5f7",
+  "theme_color": "#44683c",
+  "icons": [
+    {
+      "src": "assets/default.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

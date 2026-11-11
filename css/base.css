@@ -1,0 +1,85 @@
+/**
+ * css/base.css
+ * Global CSS variables, typography, resets, and utility classes.
+ */
+
+:root {
+  /* Dynamic theme variables (overridden in real-time by js/theme.js) */
+  --bg-color: #f4f5f7;
+  --card-bg: #ffffff;
+  --text-color: #2d3748;
+  --accent-color: #44683c;
+  --grid-columns: 3;
+
+  /* UI Neutral tokens */
+  --border-color: rgba(0, 0, 0, 0.1);
+  --muted-text: #64748b;
+  --danger-color: #dc2626;
+  --danger-bg: #fef2f2;
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.1);
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  /* Typography */
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+/* ==========================================================================
+   RESET & BOX-SIZING
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.5;
+  min-height: 100vh;
+  padding-bottom: 3rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   UTILITY CLASSES
+   ========================================================================== */
+.hidden {
+  display: none !important;
+}
+
+.separator {
+  border: 0;
+  border-top: 1px solid var(--border-color);
+  margin: 1.25rem 0;
+}

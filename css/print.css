@@ -1,0 +1,86 @@
+/**
+ * css/print.css
+ * Strict A4 print and PDF export formatting rules.
+ */
+
+@page {
+  size: A4 portrait;
+  margin: 10mm;
+}
+
+@media print {
+  /* Force exact background and accent colors in PDF output */
+  *,
+  *::before,
+  *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide all administration controls, buttons, and modals */
+  .no-print,
+  dialog,
+  .admin-bar,
+  .card__reorder-tools,
+  .card__footer {
+    display: none !important;
+  }
+
+  html,
+  body {
+    background-color: var(--bg-color) !important;
+    color: var(--text-color) !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+  }
+
+  .catalog-page {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 4mm !important;
+    box-shadow: none !important;
+  }
+
+  .catalog-header {
+    margin-bottom: 1rem !important;
+    padding-bottom: 0.75rem !important;
+  }
+
+  .catalog-banner {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 1rem !important;
+    flex-direction: row !important;
+    align-items: center !important;
+  }
+
+  /* Strictly enforce configured column count (2, 3, or 4) even when printing from mobile */
+  .catalog-grid {
+    display: grid !important;
+    grid-template-columns: repeat(var(--grid-columns, 3), minmax(0, 1fr)) !important;
+    gap: 4mm !important;
+  }
+
+  /* Prevent cards from splitting across page breaks */
+  .product-card {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    box-shadow: none !important;
+  }
+
+  /* Force collapsible ingredient lists (<details>) to display their content in PDF */
+  .card__ingredients-dropdown summary {
+    list-style: none;
+    font-weight: 700;
+  }
+
+  .card__ingredients-dropdown summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .card__ingredients-dropdown ul {
+    display: block !important;
+  }
+}
