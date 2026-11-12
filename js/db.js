@@ -79,7 +79,7 @@ export function openDatabase() {
 export async function getConfig() {
   const db = await openDatabase();
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction([STORES.CONFIG], 'readwrite');
+    const transaction = db.transaction([STORES.CONFIG], 'readonly');
     const store = transaction.objectStore(STORES.CONFIG);
     const request = store.get(DEFAULT_CONFIG.id);
 
@@ -87,8 +87,11 @@ export async function getConfig() {
       if (request.result) {
         resolve(request.result);
       } else {
-        store.put(DEFAULT_CONFIG);
-        resolve(DEFAULT_CONFIG);
+        // First run only: write default settings
+        const writeTx = db.transaction([STORES.CONFIG], 'readwrite');
+        writeTx.objectStore(STORES.CONFIG).put(DEFAULT_CONFIG);
+        writeTx.oncomplete = () => resolve(DEFAULT_CONFIG);
+        writeTx.onerror = () => reject(writeTx.error);
       }
     };
 
