@@ -110,8 +110,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     applyTheme(currentConfig);
     renderCatalog();
 
-    initDragAndDrop(catalogGrid, async () => {
-      currentProducts = await getAllProducts();
+    initDragAndDrop(catalogGrid, () => {
+      // Sync in-memory array order with DOM without re-reading all base64 images from IndexedDB
+      const orderedIds = Array.from(catalogGrid.querySelectorAll('.product-card')).map(el => el.dataset.id);
+      currentProducts.sort((a, b) => orderedIds.indexOf(a.id) - orderedIds.indexOf(b.id));
     });
 
     bindEvents();
@@ -140,6 +142,7 @@ function renderCatalog() {
 
   const fallbackPlaceholder = getPlaceholderImage(currentConfig);
   const isDetailsMode = currentConfig.ingredients_mode === 'details';
+  const fragment = document.createDocumentFragment();
 
   currentProducts.forEach((product) => {
     const card = document.createElement('article');
@@ -173,7 +176,7 @@ function renderCatalog() {
 
     card.innerHTML = `
       <div class="card__media">
-        <img src="${imageSrc}" alt="${safeName}" loading="lazy" class="card__image">
+        <img src="${imageSrc}" alt="${safeName}" loading="lazy" decoding="async" class="card__image">
         ${!product.in_stock ? '<span class="badge badge--danger">Agotado</span>' : ''}
         
         <div class="card__reorder-tools no-print">
@@ -212,8 +215,9 @@ function renderCatalog() {
       </footer>
     `;
 
-    catalogGrid.appendChild(card);
+    fragment.appendChild(card);
   });
+  catalogGrid.appendChild(fragment);
 }
 
 /* ==========================================================================
@@ -246,7 +250,12 @@ function bindEvents() {
   });
 
   btnPrintPdf.addEventListener('click', () => {
-    window.print();
+    document.querySelectorAll('.card__ingredients-dropdown').forEach(d => d.setAttribute('open', ''));
+    document.querySelectorAll('.card__image').forEach(img => img.removeAttribute('loading'));
+    // Wait one frame so low-RAM mobile browsers decode all images before opening PDF preview
+    requestAnimationFrame(() => {
+      setTimeout(() => window.print(), 60);
+    });
   });
 
   prodPriceInput.addEventListener('input', (event) => {
@@ -311,7 +320,11 @@ function bindEvents() {
     };
 
     await saveProduct(payload);
-    currentProducts = await getAllProducts();
+    if (existingIndex >= 0) {
+      currentProducts[existingIndex] = payload;
+    } else {
+      currentProducts.push(payload);
+    }
     renderCatalog();
     modalProduct.close();
   });
@@ -337,13 +350,13 @@ function bindEvents() {
         order: currentProducts.length
       };
       await saveProduct(cloned);
-      currentProducts = await getAllProducts();
+      currentProducts.push(cloned);
       renderCatalog();
     } else if (action === 'delete') {
       const confirmDelete = confirm(`¿Estás seguro de eliminar "${targetProduct.name}"?`);
       if (confirmDelete) {
         await deleteProduct(prodId);
-        currentProducts = await getAllProducts();
+        currentProducts = currentProducts.filter(p => p.id !== prodId);
         renderCatalog();
       }
     }
@@ -454,6 +467,12 @@ function bindEvents() {
   // Ensure all <details> dropdowns open automatically when exporting to PDF
   window.addEventListener('beforeprint', () => {
     document.querySelectorAll('.card__ingredients-dropdown').forEach(d => d.setAttribute('open', ''));
+    document.querySelectorAll('.card__image').forEach(img => img.removeAttribute('loading'));
+  });
+
+  modalProduct.addEventListener('close', () => {
+    prodImagePreview.src = 'assets/default.svg';
+    prodImagePreview.dataset.hasCustomImage = 'false';
   });
 }
 

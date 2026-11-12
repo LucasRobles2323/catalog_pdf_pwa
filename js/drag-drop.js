@@ -95,27 +95,41 @@ export function initDragAndDrop(gridContainer, onOrderChanged) {
     isDragging = false;
   });
 
+  let rafId = null;
+
   gridContainer.addEventListener('pointermove', (event) => {
     if (!draggedElement || event.pointerType === 'mouse') return;
 
-    if (Math.abs(event.clientY - touchStartY) > 10) {
+    const clientX = event.clientX;
+    const clientY = event.clientY;
+
+    if (Math.abs(clientY - touchStartY) <= 10) return;
+
+    if (!isDragging) {
       isDragging = true;
       draggedElement.classList.add('is-dragging');
+    }
 
-      const targetEl = document.elementFromPoint(event.clientX, event.clientY);
+    if (rafId) return;
+
+    rafId = requestAnimationFrame(() => {
+      rafId = null;
+      if (!draggedElement) return;
+
+      const targetEl = document.elementFromPoint(clientX, clientY);
       const targetCard = targetEl?.closest('.product-card');
 
       if (targetCard && targetCard !== draggedElement && targetCard.parentNode === gridContainer) {
         const rect = targetCard.getBoundingClientRect();
         const midY = rect.top + rect.height / 2;
 
-        if (event.clientY < midY) {
+        if (clientY < midY) {
           gridContainer.insertBefore(draggedElement, targetCard);
         } else {
           gridContainer.insertBefore(draggedElement, targetCard.nextSibling);
         }
       }
-    }
+    });
   });
 
   const finishPointerDrag = async (event) => {

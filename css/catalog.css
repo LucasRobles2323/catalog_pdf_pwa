@@ -126,6 +126,8 @@
    PRODUCT CARD
    ========================================================================== */
 .product-card {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 380px;
   display: flex;
   flex-direction: column;
   background-color: var(--card-bg);
@@ -138,6 +140,7 @@
 }
 
 .product-card.is-dragging {
+  will-change: transform;
   opacity: 0.5;
   transform: scale(0.98);
   border: 2px dashed var(--accent-color);

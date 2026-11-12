@@ -25,7 +25,7 @@ export async function exportBackupFile() {
     products
   };
 
-  const jsonString = JSON.stringify(backupPayload, null, 2);
+  const jsonString = JSON.stringify(backupPayload);
   const blob = new Blob([jsonString], { type: 'application/json' });
   const downloadUrl = URL.createObjectURL(blob);
 
@@ -35,10 +35,10 @@ export async function exportBackupFile() {
   anchor.download = `catalog_backup_${dateSlug}.json`;
   document.body.appendChild(anchor);
   anchor.click();
-
-  // Cleanup object URL
   document.body.removeChild(anchor);
-  URL.revokeObjectURL(downloadUrl);
+
+  // Delay revocation so mobile download managers have time to read the Blob
+  setTimeout(() => URL.revokeObjectURL(downloadUrl), 2000);
 }
 
 /**

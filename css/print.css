@@ -65,6 +65,7 @@
 
   /* Prevent cards from splitting across page breaks */
   .product-card {
+    content-visibility: visible !important;
     break-inside: avoid !important;
     page-break-inside: avoid !important;
     box-shadow: none !important;

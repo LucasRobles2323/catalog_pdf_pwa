@@ -81,31 +81,31 @@ El proyecto no utiliza compiladores, Node.js ni empaquetadores externos; está c
 
 ```text
 catalog_pdf_pwa/
-├── index.html              # Estructura SPA (Catálogo, panel de control y modales)
-├── manifest.json           # Manifiesto de instalación PWA para Android e iOS
-├── sw.js                   # Service Worker para ejecución completa offline
-├── README.md               # Documentación y especificación del sistema
+├── index.html                  # Estructura SPA (Catálogo, panel de control y modales)
+├── manifest.json               # Manifiesto de instalación PWA para Android e iOS
+├── sw.js                       # Service Worker para ejecución completa offline
+├── README.md                   # Documentación y especificación del sistema
 │
 ├── css/
-│   ├── base.css            # Tipografías, resets y variables CSS (--bg, --accent, etc.)
-│   ├── catalog.css         # Grilla responsiva, tarjetas, badges y listas colapsables
-│   ├── admin.css           # Barra superior, modales, selectores de color e inputs
-│   └── print.css           # Reglas de impresión A4, saltos de página y ocultamiento de UI
+│   ├── base.css                # Tipografías, resets y variables CSS (--bg, --accent, etc.)
+│   ├── catalog.css             # Grilla responsiva, tarjetas, badges y listas colapsables
+│   ├── admin.css               # Barra superior, modales, selectores de color e inputs
+│   └── print.css               # Reglas de impresión A4, saltos de página y ocultamiento de UI
 │
 ├── js/
-│   ├── db.js               # Conexión asíncrona con IndexedDB (CRUD y configuración)
-│   ├── image-helper.js     # Procesamiento en Canvas (recorte 1:1, compresión JPEG)
-│   ├── rules.js            # Máscara de precio en vivo, formateo y normalización de texto
-│   ├── drag-drop.js        # Motor de arrastre táctil y actualización de orden
-│   ├── theme.js            # Inyección de variables CSS (paletas y color pickers)
-│   ├── backup.js           # Exportación e importación de archivos de respaldo JSON
-│   └── app.js              # Inicialización, orquestación de eventos y renderizado
+│   ├── db.js                   # Conexión asíncrona con IndexedDB (CRUD y configuración)
+│   ├── image-helper.js         # Procesamiento en Canvas (recorte 1:1, compresión JPEG)
+│   ├── rules.js                # Máscara de precio en vivo, formateo y normalización de texto
+│   ├── drag-drop.js            # Motor de arrastre táctil y actualización de orden
+│   ├── theme.js                # Inyección de variables CSS (paletas y color pickers)
+│   ├── backup.js               # Exportación e importación de archivos de respaldo JSON
+│   └── app.js                  # Inicialización, orquestación de eventos y renderizado
 │
 └── assets/
     ├── icons/
-    │   ├── icon-192.png    # Icono estándar PWA
-    │   └── icon-512.png    # Icono en alta resolución PWA
-    └── default.svg         # Gráfico vectorial neutro y ultra ligero (~1.5 KB)
+    │   ├── B_app_icon.jpg      # Icono en alta resolución PWA
+    │   └── S_app_icon.jpg      # Icono estándar PWA
+    └── default.svg             # Gráfico vectorial neutro y ultra ligero (~1.5 KB)
 ```
 
 ---

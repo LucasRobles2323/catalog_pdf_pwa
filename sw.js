@@ -20,7 +20,9 @@ const APP_SHELL_ASSETS = [
   './js/theme.js',
   './js/backup.js',
   './js/drag-drop.js',
-  './assets/default.svg'
+  './assets/default.svg',
+  './assets/icons/S_app_icon.jpg',
+  './assets/icons/B_app_icon.jpg'
 ];
 
 /**
