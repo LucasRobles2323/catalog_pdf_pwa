@@ -1,15 +1,16 @@
 /**
  * css/print.css
- * Strict A4 print and PDF export formatting rules.
+ * Digital PDF export rules (260mm x 370mm custom canvas for mobile & PC screens).
  */
 
 @page {
-  size: A4 portrait;
-  margin: 0;
+  /* Custom large digital sheet (wider and taller than A4) */
+  size: 260mm 370mm;
+  margin: 0mm;
 }
 
 @media print {
-  /* Force exact background and accent colors in PDF output */
+  /* 1. Force exact background and accent colors in PDF output */
   *,
   *::before,
   *::after {
@@ -17,7 +18,7 @@
     print-color-adjust: exact !important;
   }
 
-  /* Hide all administration controls, buttons, and modals */
+  /* 2. Hide all administration controls, buttons, and modals */
   .no-print,
   dialog,
   .admin-bar,
@@ -26,49 +27,123 @@
     display: none !important;
   }
 
+  /* 3. Full-bleed digital canvas */
   html,
   body {
     background-color: var(--bg-color) !important;
     color: var(--text-color) !important;
     padding: 0 !important;
     margin: 0 !important;
-    width: 100% !important;
+    width: 260mm !important;
+    min-height: 370mm !important;
   }
 
   .catalog-page {
     max-width: 100% !important;
     width: 100% !important;
+    min-height: 370mm !important;
     margin: 0 !important;
-    padding: 0 !important;
+    padding: 8mm 8mm !important;
     box-shadow: none !important;
   }
 
+  /* 4. Header & Promotional Banner */
   .catalog-header {
-    margin-bottom: 1rem !important;
-    padding-bottom: 0.75rem !important;
+    margin-bottom: 6mm !important;
+    padding-bottom: 4mm !important;
+  }
+
+  .catalog-header__title {
+    font-size: 24pt !important;
+  }
+
+  .catalog-header__subtitle {
+    font-size: 13pt !important;
+    margin-top: 2mm !important;
   }
 
   .catalog-banner {
     break-inside: avoid;
     page-break-inside: avoid;
-    margin-bottom: 1rem !important;
+    margin-bottom: 6mm !important;
+    padding: 4mm 5mm !important;
     flex-direction: row !important;
     align-items: center !important;
   }
 
-  /* Strictly enforce configured column count (2, 3, or 4) even when printing from mobile */
+  /* 5. Grid layout: obeys 2, 3, or 4 columns from Settings */
   .catalog-grid {
     display: grid !important;
     grid-template-columns: repeat(var(--grid-columns, 3), minmax(0, 1fr)) !important;
-    gap: 4mm !important;
+    gap: 5mm !important;
+    align-items: stretch !important;
   }
 
-  /* Prevent cards from splitting across page breaks */
+  /* 6. Product Cards with full 1:1 square images */
   .product-card {
     content-visibility: visible !important;
     break-inside: avoid !important;
     page-break-inside: avoid !important;
     box-shadow: none !important;
+    border-radius: 10px !important;
+  }
+
+  .card__media {
+    width: 100% !important;
+    aspect-ratio: 1 / 1 !important;
+    height: auto !important;
+    background-color: #f1f5f9 !important;
+    overflow: hidden !important;
+  }
+
+  .card__image {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  /* 7. Standardized readable typography (overrides mobile screen media queries) */
+  .card__body {
+    padding: 4.5mm !important;
+    gap: 2.2mm !important;
+  }
+
+  .card__header-row {
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    gap: 2.5mm !important;
+  }
+
+  .card__title {
+    font-size: 12pt !important;
+    line-height: 1.25 !important;
+  }
+
+  .card__format {
+    font-size: 9.5pt !important;
+    padding: 1mm 2.5mm !important;
+  }
+
+  .card__price {
+    font-size: 14.5pt !important;
+  }
+
+  .card__price--empty {
+    font-size: 10.5pt !important;
+  }
+
+  .card__description {
+    font-size: 10pt !important;
+    line-height: 1.4 !important;
+  }
+
+  .card__ingredients,
+  .card__ingredients-dropdown {
+    font-size: 9pt !important;
+    line-height: 1.35 !important;
+    padding-top: 2.5mm !important;
+    margin-top: auto !important;
   }
 
   /* Force collapsible ingredient lists (<details>) to display their content in PDF */
@@ -83,5 +158,11 @@
 
   .card__ingredients-dropdown ul {
     display: block !important;
+    margin-top: 1.5mm !important;
+    padding-left: 4.5mm !important;
+  }
+
+  .card__ingredients-dropdown li {
+    margin-bottom: 0.8mm !important;
   }
 }
